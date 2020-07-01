@@ -1,5 +1,5 @@
 from pyriemann.utils.geodesic import geodesic 
-import numpy
+import numpy as np
 
 from joblib import Parallel, delayed
 
@@ -31,13 +31,13 @@ class MDWM (MDM):
         self : MDM instance
             The MDM instance.
         """
-        self.classes_ = numpy.unique(y)
+        self.classes_ = np.unique(y)
         # TODO: ajouter un test pour verifier que y et y_domain
         #       ont les meme classes
 
 
         if sample_weight is None:
-            sample_weight = numpy.ones(X_domain.shape[0])
+            sample_weight = np.ones(X_domain.shape[0])
              
         if self.n_jobs == 1:
             self.target_means_ = [mean_covariance(X[y == l], 
@@ -79,7 +79,7 @@ class MDWM (MDM):
                 covtest, self.class_center_[m], self.metric_dist)
                 for m in range(Nc))
 
-        dist = numpy.concatenate(dist, axis=1)
+        dist = np.concatenate(dist, axis=1)
         return dist
            
            
