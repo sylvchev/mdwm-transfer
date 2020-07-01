@@ -1,12 +1,11 @@
 from pyriemann.utils.geodesic import geodesic 
 import numpy
 
-from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
 from joblib import Parallel, delayed
 
 from pyriemann.utils.mean import mean_covariance
 from pyriemann.utils.distance import distance
-
+from pyriemann.classification import MDM
 
 class MDWM (MDM):
     def __init__(self, L=0,  **kwargs):
