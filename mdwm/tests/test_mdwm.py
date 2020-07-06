@@ -1,5 +1,7 @@
 from ..mdwm import MDWM
 import numpy as np
+import pytest
+
 
 def generate_cov(Nt, Ne):
     """Generate a set of cavariances matrices for test purpose."""
@@ -13,26 +15,22 @@ def generate_cov(Nt, Ne):
     return covmats
 
 
-def test_MDWM_init():
+def test_MDWM_init_noargs():
     m = MDWM()
 
+def test_MDWM_init_L():
     m = MDWM(L=0.5)
+
+def test_MDWM_init_MDM():
     m = MDWM(metric='riemann')
 
+def test_MDWM_init_error_MDM():
     with pytest.raises(TypeError):
         MDWM(metric=42)
 
     # with pytest.raises(ValueError):
     #     MDWM(L=-0.5)
 
-
-def test_MDWM_fit():
-    X = generate_cov(10, 3)
-    y = np.array([0, 1]).repeat(5)
-    X_domain = generate_cov(10, 3)
-    y_domain = np.array([0, 1]).repeat(5)
-    mdwm = MDWM(L=0.5)
-    mdwm.fit(X, y, X_domain, y_domain)
 
 def test_MDWM_fit():
     X = generate_cov(10, 3)
