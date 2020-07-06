@@ -1,11 +1,11 @@
-from pyriemann.utils.geodesic import geodesic
-import numpy as np
-
 from joblib import Parallel, delayed
 
-from pyriemann.utils.mean import mean_covariance
-from pyriemann.utils.distance import distance
+import numpy as np
+
 from pyriemann.classification import MDM
+from pyriemann.utils.distance import distance
+from pyriemann.utils.geodesic import geodesic
+from pyriemann.utils.mean import mean_covariance
 
 
 class MDWM(MDM):
@@ -24,8 +24,8 @@ class MDWM(MDM):
         y : ndarray shape (n_trials, 1)
             labels corresponding to each trial.
         sample_weight : None | ndarray shape (n_trials, 1)
-            the weights of each sample from the domain. if None, each sample is treated with
-            equal weights.
+            the weights of each sample from the domain. if None, each sample
+            is treated with equal weights.
 
         Returns
         -------
@@ -41,35 +41,37 @@ class MDWM(MDM):
 
         if self.n_jobs == 1:
             self.target_means_ = [
-                mean_covariance(X[y == l], metric=self.metric_mean)
+                mean_covariance(X[y == label], metric=self.metric_mean)
                 # sample_weight=sample_weight_target[y == l])
-                for l in self.classes_
+                for label in self.classes_
             ]
 
             self.domain_means_ = [
                 mean_covariance(
-                    X_domain[y_domain == l],
+                    X_domain[y_domain == label],
                     metric=self.metric_mean,
-                    sample_weight=sample_weight[y_domain == l],
+                    sample_weight=sample_weight[y_domain == label],
                 )
-                for l in self.classes_
+                for label in self.classes_
             ]
         else:
             self.target_means_ = Parallel(n_jobs=self.n_jobs)(
-                delayed(mean_covariance)(X[y == l], metric=self.metric_mean)
-                for l in self.classes_
+                delayed(mean_covariance)(X[y == label],
+                                         metric=self.metric_mean)
+                for label in self.classes_
             )  # sample_weight=sample_weight_target[y == l])
             self.domain_means_ = Parallel(n_jobs=self.n_jobs)(
                 delayed(mean_covariance)(
-                    X_domain[y_domain == l],
+                    X_domain[y_domain == label],
                     metric=self.metric_mean,
-                    sample_weight=sample_weight[y_domain == l],
+                    sample_weight=sample_weight[y_domain == label],
                 )
-                for l in self.classes_
+                for label in self.classes_
             )
 
         self.class_center_ = [
-            geodesic(self.target_means_[i], self.domain_means_[i], self.L, self.metric)
+            geodesic(self.target_means_[i], self.domain_means_[i],
+                     self.L, self.metric)
             for i, _ in enumerate(self.classes_)
         ]
 
@@ -86,7 +88,8 @@ class MDWM(MDM):
             ]
         else:
             dist = Parallel(n_jobs=self.n_jobs)(
-                delayed(distance)(covtest, self.class_center_[m], self.metric_dist)
+                delayed(distance)(covtest, self.class_center_[m],
+                                  self.metric_dist)
                 for m in range(Nc)
             )
 
@@ -115,7 +118,7 @@ class MDWM(MDM):
         Parameters
         ----------
         X : ndarray, shape (n_trials, n_channels, n_channels)
-            ndarray of SPD matrices. 
+            ndarray of SPD matrices.
 
         Returns
         -------

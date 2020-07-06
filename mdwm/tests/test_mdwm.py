@@ -1,3 +1,4 @@
+# flake8: noqa
 from ..mdwm import MDWM
 import numpy as np
 import pytest
