@@ -11,6 +11,8 @@ from pyriemann.utils.mean import mean_covariance
 class MDWM(MDM):
     def __init__(self, L=0, **kwargs):
         """Init."""
+        if L < 0. or L > 1.0:
+            raise ValueError("L should be chosen between 0.0 and 1.0")
         self.L = L
         super().__init__(**kwargs)
 
