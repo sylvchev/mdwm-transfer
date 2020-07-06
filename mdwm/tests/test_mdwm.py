@@ -29,8 +29,8 @@ def test_MDWM_init_error_MDM():
     with pytest.raises(TypeError):
         MDWM(metric=42)
 
-    # with pytest.raises(ValueError):
-    #     MDWM(L=-0.5)
+    with pytest.raises(ValueError):
+        MDWM(L=-0.5)
 
 
 def test_MDWM_fit():
