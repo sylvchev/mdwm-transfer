@@ -4,31 +4,23 @@
 # In[1]:
 
 
-from sklearn.decomposition import PCA
-from sklearn.model_selection import LeaveOneOut, cross_val_score, ShuffleSplit, train_test_split
-from sklearn.model_selection import StratifiedShuffleSplit, StratifiedKFold
-from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import ShuffleSplit, StratifiedShuffleSplit
 from sklearn.metrics import accuracy_score
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.pipeline import make_pipeline
 import sklearn
 
 import numpy as np
-import copy
-from MDWM import MDWM
+from mdwm import MDWM
 
-from pyriemann.classification import MDM, TSclassifier, KNearestNeighbor, FgMDM
-from pyriemann.utils.mean import mean_covariance
-from pyriemann.estimation import Covariances,XdawnCovariances
+from pyriemann.classification import MDM, TSclassifier
+from pyriemann.estimation import Covariances
 from pyriemann.tangentspace import TangentSpace
 from pyriemann.classification import MDM
 
-from moabb.paradigms import SSVEP, FilterBankSSVEP
-from moabb.evaluations import WithinSessionEvaluation
+from moabb.paradigms import FilterBankSSVEP
 from moabb.datasets import SSVEPExo
 from moabb.pipelines import ExtendedSSVEPSignal
 
-from mne.decoding import CSP
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -182,4 +174,3 @@ sns.catplot(data=df_mdwm, x='samples per class', y='accuracy',
 
 
 sns.catplot(data=df_mdwm, x='lambda', y='accuracy', hue='samples per class', kind='bar', palette='viridis')
-
